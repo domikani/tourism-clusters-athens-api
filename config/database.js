@@ -8,7 +8,7 @@ mongoose.connect(process.env.MONGO_URI, {
 global.Post = mongoose.model("Post", {
     timestamp: Date,
     ownerLocation: String,
-    photo: String,
+    photo: Number,
     latitude:Number,
     longitude:Number,
     visionData: String

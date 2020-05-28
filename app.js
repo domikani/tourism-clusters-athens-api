@@ -16,8 +16,11 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
+//Home route
 app.get("/", (req, res) => {
     res.send("Welcome");
 });
 
+//Posts route
 app.get("/posts", PostsController.index);
+app.post("/posts",PostsController.index);
