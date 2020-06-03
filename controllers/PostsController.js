@@ -61,20 +61,20 @@ const index = async (req, res) => {
 
     //Save the data in compass
     for (let i = 0; i < results[0].photos.photo.length; i++) {
-        const p = new Post({
-            userID: results[0].photos.photo[i].owner,
-            timestamp: results[0].photos.photo[i].datetaken,
-            photo: results[0].photos.photo[i].img,
-            latitude: results[0].photos.photo[i].latitude,
-            longitude: results[0].photos.photo[i].longitude,
-            ownerLocation: results[0].photos.photo[i].location,
-        });
-        p.save().then(() => {
-            res.json({
-                message: "Post created"
+        try {
+            const p = new Post({
+                userID: results[0].photos.photo[i].owner,
+                timestamp: results[0].photos.photo[i].datetaken,
+                photo: results[0].photos.photo[i].img,
+                latitude: results[0].photos.photo[i].latitude,
+                longitude: results[0].photos.photo[i].longitude,
+                ownerLocation: results[0].photos.photo[i].location,
             });
-        });
-
+            await p.save();
+            console.log(p._id + " created");
+        } catch (err) {
+            console.log("Already exists");
+        }
     }
 
     return res.json(results);

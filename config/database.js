@@ -5,13 +5,18 @@ mongoose.connect(process.env.MONGO_URI, {
     useUnifiedTopology: true
 });
 
-global.Post = mongoose.model("Post", {
+const postSchema = mongoose.Schema({
     timestamp: Date,
     userID: String,
     ownerLocation: String,
-    photo: String,
+    photo: {
+        type: String,
+        required: true,
+        unique: true
+    },
     latitude:Number,
     longitude:Number,
     visionData: String
 });
+global.Post = mongoose.model("Post", postSchema);
 
