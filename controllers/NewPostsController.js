@@ -1,4 +1,4 @@
-/*const rp = require("request-promise"); // einai i vivliothiki pou mou epitrepei na kanw requests
+const rp = require("request-promise"); // einai i vivliothiki pou mou epitrepei na kanw requests
 
 
 const index = async (req, res) => {
@@ -31,7 +31,7 @@ const index = async (req, res) => {
         photosIDs.push(results[0].photos.photo[i].id);
     }
 
-    /!*console.log(photosIDs);*!/
+    /*console.log(photosIDs);*/
 
     const photoData = [];
     //Second request to retrieve the location and the image url
@@ -81,60 +81,44 @@ const index = async (req, res) => {
         try {
 
             const p = new Post({
-                type: "Feature",
-                properties: {
-                    userID: results[0].photos.photo[i].owner,
-                    photo: results[0].photos.photo[i].img,
-                    ownerLocation: results[0].photos.photo[i].ownerLocation,
-                    yearTaken: results[0].photos.photo[i].dateTime.year,
-                    monthTaken: results[0].photos.photo[i].dateTime.month,
-                    dayTaken: results[0].photos.photo[i].dateTime.day,
-                    hourTaken: results[0].photos.photo[i].dateTime.hour,
-                    id: req.body.id
-                },
-                geometry: {
-                    type: 'Point',
-                    coordinates: results[0].photos.photo[i].location
 
-                }
+                userID: results[0].photos.photo[i].owner,
+                photo: results[0].photos.photo[i].img,
+                ownerLocation: results[0].photos.photo[i].ownerLocation,
+                yearTaken: results[0].photos.photo[i].dateTime.year,
+                monthTaken: results[0].photos.photo[i].dateTime.month,
+                dayTaken: results[0].photos.photo[i].dateTime.day,
+                hourTaken: results[0].photos.photo[i].dateTime.hour,
+                id: req.body.id,
+                geometry:
+                    {
+                        type: 'Point',
+                        coordinates:
+                        results[0].photos.photo[i].location
+
+
+                    }
             });
             await p.save();
             console.log(p._id + " created");
+
 
         } catch (e) {
             console.log("Already exists");
         }
     }
 
-};
 
+};
 const list = (req, res) => {
     Post.find({}, (err, posts) => {
         res.json(posts)
     })
 };
 
-const data2010 = (req, res) => {
-    Post.find({}, (err, posts) => {
-        res.send(posts.filter(function (e) {
-            return e.properties.yearTaken === "2010";
-        }));
-
-
-    });
-};
-
-
-const getOne = (req, res) => {
-    Post.find({type: "Feature"}, (err, posts) => {
-        res.json(posts)
-
-    })
-};
 
 module.exports = {
     index,
-    data2010,
-    list,
+    list
 
-};*/
+};
