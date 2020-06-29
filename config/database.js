@@ -5,7 +5,7 @@ mongoose.connect(process.env.MONGO_URI, {
     useUnifiedTopology: true
 });
 
-/*const postSchema = mongoose.Schema({
+const geoSchema = mongoose.Schema({
     type: String,
     properties: {
         userID: String,
@@ -19,7 +19,6 @@ mongoose.connect(process.env.MONGO_URI, {
         monthTaken: String,
         dayTaken: String,
         hourTaken: String,
-        visionData: String,
         id: mongoose.Types.ObjectId
     },
     geometry: {
@@ -33,35 +32,8 @@ mongoose.connect(process.env.MONGO_URI, {
             required: true
         }
     }
-});*/
-
-const postsSchema = mongoose.Schema({
-    userID: String,
-    ownerLocation: String,
-    photo: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    yearTaken: String,
-    monthTaken: String,
-    dayTaken: String,
-    hourTaken: String,
-    visionData: String,
-    id: mongoose.Types.ObjectId,
-    geometry: {
-        type: {
-            type: String,
-            enum: ['Point'],
-            required: true
-        },
-        coordinates: {
-            type: [Number],
-            required: true
-        }
-    }
-
 });
 
-/*global.Post = mongoose.model("Post", postSchema);*/
-global.Post = mongoose.model("Post", postsSchema);
+
+
+global.Geo = mongoose.model("Geo", geoSchema);

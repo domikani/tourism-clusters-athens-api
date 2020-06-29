@@ -9,7 +9,7 @@ require("./config/database");
 // Require Controllers
 /*const PostsController = require("./controllers/PostsController");*/
 const YearsStatsController = require("./controllers/YearsStatsController");
-const NewPostsController = require("./controllers/NewPostsController");
+const PostsController = require("./controllers/PostsController");
 
 
 //Initialize app
@@ -25,11 +25,9 @@ app.get("/", (req, res) => {
 });
 
 //Posts route
-/*app.get("/posts/2010", PostsController.data2010);
 app.post("/posts", PostsController.index);
-app.get("/posts", PostsController.list);*/
+app.get("/posts", PostsController.list);
 app.get("/posts/stats/years", YearsStatsController.yearStats);
-app.get("/posts/stats/years/months", YearsStatsController.monthsStats);
-/*app.get ("/posts", NewPostsController.index);*/
-app.post("/get", NewPostsController.index);
-app.get("/posts", NewPostsController.list);
+app.get("/posts/stats/months", YearsStatsController.monthsStats);
+
+

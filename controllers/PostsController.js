@@ -1,140 +1,109 @@
-/*const rp = require("request-promise"); // einai i vivliothiki pou mou epitrepei na kanw requests
+/*const rp = require("request-promise"); // einai i vivliothiki pou mou epitrepei na kanw requests*/
+const _ = require("lodash");
+const helpers = require("../helpers");
 
 
 const index = async (req, res) => {
-    //Request the data
+//Request the data
     const apiKey = process.env.FLICKR_APIKEY;
-    const photosRequest = await rp({
-        uri: 'https://www.flickr.com/services/rest/',
-        qs: {
-            method: "flickr.photos.search",
-            api_key: apiKey,
-            min_taken_date: '2009-01-01',
-            max_taken_date: '2019-12-31',
-            bbox: "22.797318,40.471502,23.159866,40.723323",
-            extras: "geo,date_taken",
-            format: "json",
-            nojsoncallback: 1
+    const requestData = [];
+    await helpers.firstRequest(apiKey, requestData, "request2009", 17, 2009, 0o1, 0o1, 12, 31);
 
-        }
 
-    });
+    /*await getResults("request2010A", 12, 2010, 0o1, 0o1, 0o6, 30);*/
+    /*await getResults("request2010B", 11, 2010, 0o6, 30, 12, 31);
+    await getResults("request2012A", 13, 2012, 0o1, 0o1, 0o6, 30);
+    await getResults("request2012B", 14, 2012, 0o6, 30, 12, 31);
+    await getResults("request2013A", 17, 2013, 0o1, 0O1, 0o6, 30);
+    await getResults("request2013B", 15, 2013, 0o6, 30, 12, 31);
+    await getResults("request2014", 13, 2014, 0o1, 0o1, 12, 31);
+    await getResults("request2015", 15, 2015, 0o1, 0o1, 12, 31);
+    await getResults("request2016A", 8, 2016, 0o1, 0o1, 0o6, 30);
+    await getResults("request2016B", 13, 2016, 0o6, 30, 12, 31);
+    await getResults("request2017", 15, 2017, 0o1, 0o1, 12, 31);
+    await getResults("request2018A", 12, 2018, 0o1, 0o1, 0o6, 30);
+    await getResults("request2018B", 13, 2018, 0o6, 30, 12, 31);
+    await getResults("request2019", 10, 2019, 0o1, 0o1, 12, 31);*/
 
-    //Store the data from the photos request to an array
-    const photosData = JSON.parse(photosRequest);
+
     const results = [];
-    results.push(photosData);
+    for (let rd = 0; rd < requestData.length; rd++) {
+        for (let p = 0; p < requestData[rd].photos.photo.length; p++) {
+            results.push(requestData[rd].photos.photo[p]);
+        }
+    }
+    console.log("Original Posts stored");
 
-    //Store the photos ID to an array to made the second request
+//Store the photos ID to an array to make the second request
     const photosIDs = [];
-    for (let i = 0; i < results[0].photos.photo.length; i++) {
-        photosIDs.push(results[0].photos.photo[i].id);
+    for (let r = 0; r < results.length; r++) {
+        photosIDs.push(results[r].id);
     }
 
-    /!*console.log(photosIDs);*!/
-
+//Second request to get extra data for the posts
     const photoData = [];
-    //Second request to retrieve the location and the image url
-    for (let i = 0; i < photosIDs.length; i++) {
-        const photo_url_request = await rp({
-            uri: 'https://www.flickr.com/services/rest/',
-            qs: {
-                method: "flickr.photos.getInfo",
-                api_key: apiKey,
-                photo_id: photosIDs[i],
-                format: "json",
-                nojsoncallback: 1
+    await helpers.requestChunk(photoData, photosIDs, apiKey);
+
+
+// Insert extra fields to the results table such as img, location, date/time, and owner location
+    for (let r = 0; r < results.length; r++) {
+
+        results[r].location = [results[r].longitude, results[r].latitude];
+        results[r].dateTime = helpers.splitter(results[r].datetaken);
+        results[r].ownerLocation = photoData[r].photo.owner.location;
+        results[r].img = photoData[r].photo.urls.url[0]._content;
+
+    }
+
+    console.log("Posts updated with extra data");
+
+
+//Save the data in compass
+    console.time("create posts");
+    const chunks = _.chunk(results, 250);
+    for (const chunk of chunks) {
+        for (const post of chunk) {
+            try {
+                const g = new Geo({
+                    type: "Feature",
+                    properties: {
+                        photo: post.id,
+                        userID: post.owner,
+                        yearTaken: post.dateTime.year,
+                        monthTaken: post.dateTime.month,
+                        dayTaken: post.dateTime.day,
+                        hourTaken: post.dateTime.hour,
+                        id: req.body.id
+                    },
+                    geometry: {
+                        type: 'Point',
+                        coordinates: post.location
+
+                    }
+                });
+                await g.save();
+                console.log(`${g._id} has been created`);
+            } catch (e) {
+                console.log(`This post already exists`);
             }
-        });
-        const extraData = JSON.parse(photo_url_request);
-        photoData.push(extraData);
-    }
-
-    function f(str) {
-
-        const firstSplit = str.split(' ');
-        const dateSplit = firstSplit[0].split('-');
-
-        return {
-            year: dateSplit[0],
-            month: dateSplit[1],
-            day: dateSplit[2],
-            hour: firstSplit[1]
-        };
-
-    }
-
-    //Store in the results array new fields such as location and image url
-    for (let i = 0; i < photoData.length; i++) {
-        if (photoData[i].photo.id === results[0].photos.photo[i].id) {
-            results[0].photos.photo[i].ownerLocation = photoData[i].photo.owner.location;
-            results[0].photos.photo[i].img = photoData[i].photo.urls.url[0]._content;
-            results[0].photos.photo[i].location = [photoData[i].photo.location.longitude, photoData[i].photo.location.latitude];
-            results[0].photos.photo[i].dateTime = f(photoData[i].photo.dates.taken);
-
         }
+        console.log(chunk.length, " posts created");
+
     }
-
-    //Save the data in compass
-    for (let i = 0; i < results[0].photos.photo.length; i++) {
-
-        try {
-
-            const p = new Post({
-                type: "Feature",
-                properties: {
-                    userID: results[0].photos.photo[i].owner,
-                    photo: results[0].photos.photo[i].img,
-                    ownerLocation: results[0].photos.photo[i].ownerLocation,
-                    yearTaken: results[0].photos.photo[i].dateTime.year,
-                    monthTaken: results[0].photos.photo[i].dateTime.month,
-                    dayTaken: results[0].photos.photo[i].dateTime.day,
-                    hourTaken: results[0].photos.photo[i].dateTime.hour,
-                    id: req.body.id
-                },
-                geometry: {
-                    type: 'Point',
-                    coordinates: results[0].photos.photo[i].location
-
-                }
-            });
-            await p.save();
-            console.log(p._id + " created");
-
-        } catch (e) {
-            console.log("Already exists");
-        }
-    }
+    console.timeEnd("create posts");
+    await res.json("Posts created");
 
 };
-
-const list = (req, res) => {
-    Post.find({}, (err, posts) => {
-        res.json(posts)
-    })
-};
-
-const data2010 = (req, res) => {
-    Post.find({}, (err, posts) => {
-        res.send(posts.filter(function (e) {
-            return e.properties.yearTaken === "2010";
-        }));
-
-
+const list = async (req, res) => {
+    const posts = await Geo.find().exec();
+    return res.json({
+        type: "FeatureCollection",
+        features: posts
     });
-};
-
-
-const getOne = (req, res) => {
-    Post.find({type: "Feature"}, (err, posts) => {
-        res.json(posts)
-
-    })
 };
 
 module.exports = {
     index,
-    data2010,
-    list,
+    list
 
-};*/
+};
