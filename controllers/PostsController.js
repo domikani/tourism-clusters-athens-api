@@ -7,16 +7,16 @@ const index = async (req, res) => {
 //Request the data
     const apiKey = process.env.FLICKR_APIKEY;
     const requestData = [];
-    await helpers.firstRequest(apiKey, requestData, "request2009", 17, 2009, 0o1, 0o1, 12, 31);
+    await helpers.firstRequest(apiKey, requestData, "request2009", 3, 2009, 0o1, 0o1, 0o3, 31);
+    /*await helpers.firstRequest(apiKey, requestData, "request2010A", 12, 2010, 0o1, 0o1, 0o6, 30);*/
 
 
-    /*await getResults("request2010A", 12, 2010, 0o1, 0o1, 0o6, 30);*/
     /*await getResults("request2010B", 11, 2010, 0o6, 30, 12, 31);
     await getResults("request2012A", 13, 2012, 0o1, 0o1, 0o6, 30);
     await getResults("request2012B", 14, 2012, 0o6, 30, 12, 31);
     await getResults("request2013A", 17, 2013, 0o1, 0O1, 0o6, 30);
     await getResults("request2013B", 15, 2013, 0o6, 30, 12, 31);
-    await getResults("request2014", 13, 2014, 0o1, 0o1, 12, 31);
+    await getResults("request2014", 13, 2014, 0o1, 0o1, 12, 31);l
     await getResults("request2015", 15, 2015, 0o1, 0o1, 12, 31);
     await getResults("request2016A", 8, 2016, 0o1, 0o1, 0o6, 30);
     await getResults("request2016B", 13, 2016, 0o6, 30, 12, 31);
@@ -51,7 +51,7 @@ const index = async (req, res) => {
         results[r].location = [results[r].longitude, results[r].latitude];
         results[r].dateTime = helpers.splitter(results[r].datetaken);
         results[r].ownerLocation = photoData[r].photo.owner.location;
-        results[r].img = photoData[r].photo.urls.url[0]._content;
+
 
     }
 
@@ -73,7 +73,8 @@ const index = async (req, res) => {
                         monthTaken: post.dateTime.month,
                         dayTaken: post.dateTime.day,
                         hourTaken: post.dateTime.hour,
-                        id: req.body.id
+                        id: req.body.id,
+                        ownerLocation: post.ownerLocation
                     },
                     geometry: {
                         type: 'Point',
@@ -103,7 +104,7 @@ const list = async (req, res) => {
 };
 
 module.exports = {
-    index,
+    /*index*/
     list
 
 };
