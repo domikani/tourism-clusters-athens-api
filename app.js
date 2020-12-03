@@ -28,9 +28,9 @@ app.get("/", (req, res) => {
 });
 
 //Posts route
-/*app.post("/posts", PostsController.index);
-app.get("/posts", PostsController.index);*/
-app.get("/posts", PostsController.list);
+app.post("/posts", PostsController.index);
+/*app.get("/posts", PostsController.index);*/
+/*app.get("/posts", PostsController.list);*/
 app.get("/posts/update", UpdateController.update);
 app.get("/posts/stats/years", YearsStatsController.yearStats);
 app.get("/posts/stats/months", MonthsStatsController.monthsStats);

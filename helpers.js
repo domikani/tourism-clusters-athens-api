@@ -181,6 +181,7 @@ const countryList = [
     "Isle of Man",
     "Israel",
     "Italy",
+    "Italia",
     "Jamaica",
     "Japan",
     "Jersey",

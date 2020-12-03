@@ -7,7 +7,7 @@ const index = async (req, res) => {
 //Request the data
     const apiKey = process.env.FLICKR_APIKEY;
     const requestData = [];
-    await helpers.firstRequest(apiKey, requestData, "request2009", 3, 2009, 0o1, 0o1, 0o3, 31);
+    await helpers.firstRequest(apiKey, requestData, "request2009", 2, 2009, 0o1, 0o1, 0o3, 31);
     /*await helpers.firstRequest(apiKey, requestData, "request2010A", 12, 2010, 0o1, 0o1, 0o6, 30);*/
 
 
@@ -50,6 +50,7 @@ const index = async (req, res) => {
 
         results[r].location = [results[r].longitude, results[r].latitude];
         results[r].dateTime = helpers.splitter(results[r].datetaken);
+
         results[r].ownerLocation = photoData[r].photo.owner.location;
 
 
@@ -95,16 +96,19 @@ const index = async (req, res) => {
     await res.json("Posts created");
 
 };
+
+/*
 const list = async (req, res) => {
     const posts = await Geo.find().exec();
+
     return res.json({
         type: "FeatureCollection",
         features: posts
     });
-};
+};*/
 
 module.exports = {
-    /*index*/
-    list
+    index/*,
 
+    list*/
 };
