@@ -13,6 +13,7 @@ const UpdateController = require("./controllers/UpdateController");
 const CountriesController = require("./controllers/CountriesController");
 const MonthsStatsController = require("./controllers/MonthsStatsController");
 const DeleteController = require("./controllers/DeleteController");
+const DuplicatesController = require("./controllers/DuplicatesController");
 
 
 //Initialize app
@@ -35,5 +36,6 @@ app.get("/posts/stats/years", YearsStatsController.yearStats);
 app.get("/posts/stats/months", MonthsStatsController.monthsStats);
 app.get("/posts/stats/countries", CountriesController.countries);
 app.get("/posts/delete", DeleteController.cleanData);
+app.get("/posts/duplicate", DuplicatesController.duplicates);
 
 
