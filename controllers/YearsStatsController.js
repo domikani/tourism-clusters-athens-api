@@ -5,7 +5,7 @@ const yearStats = async (req, res) => {
     const results = [];
 
     for (let l = 0; l < labels.length; l++) {
-        const num = await Geo.count({"properties.yearTaken": labels[l]});
+        const num = await Geo.countDocuments({"properties.yearTaken": labels[l]});
         results.push(num);
     }
     await res.json({

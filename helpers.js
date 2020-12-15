@@ -1,7 +1,8 @@
+//const rp = require("request-promise"); a library for requests
 //Request function to get the posts from flickr
 const rp = require("request-promise");
-const firstRequest = async (key, array, request, pages, year, monthA, dayA, monthB, dayB) => {
-    for (let p = 1; p < pages; p++) {
+const firstRequest = async (key, array, pages, year, monthA, dayA, monthB, dayB) => {
+    for (let p = 1; p < pages + 1; p++) {
         const request = await rp({
 
             uri: 'https://www.flickr.com/services/rest/',
@@ -17,6 +18,8 @@ const firstRequest = async (key, array, request, pages, year, monthA, dayA, mont
                 nojsoncallback: 1,
                 page: p
             }
+        }).catch(error => {
+            console.log('FLICKR API ERROR FIRST REQUEST');
         });
         //Store the data from the photos request to an array
         const postsData = JSON.parse(request);
@@ -34,7 +37,8 @@ async function requestChunk(arrayPhotoData, arrayPhotosIDs, key) {
     for (const chunk of chunksPhotoIDs) {
         const secondRequests = [];
         for (const photoID of chunk) {
-            const photo_url_request = await rp({
+
+            const photo_url_request = rp({
                 uri: 'https://www.flickr.com/services/rest/',
                 qs: {
                     method: "flickr.photos.getInfo",
@@ -43,12 +47,18 @@ async function requestChunk(arrayPhotoData, arrayPhotosIDs, key) {
                     format: "json",
                     nojsoncallback: 1
                 }
+            }).catch(error => {
+                console.log(`FLICKR API ERROR SECOND REQUEST`)
             });
             secondRequests.push(photo_url_request);
-            const extraData = JSON.parse(photo_url_request);
-            arrayPhotoData.push(extraData);
         }
-        await Promise.all(secondRequests);
+        await Promise.all(secondRequests).then((body) => {
+            body.forEach((res) => {
+                if (res) arrayPhotoData.push(JSON.parse(res));
+            });
+        }).catch(error => {
+            console.log(error.message);
+        });
         console.log(chunk.length, " extra data acquired");
     }
     console.timeEnd("Get extra data for posts");
