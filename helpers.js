@@ -81,6 +81,7 @@ const splitter = (str) => {
 
 //country list for update controller
 const countryList = [
+    "Ελλάδα",
     "Afghanistan",
     "England",
     "Albania",
@@ -113,6 +114,7 @@ const countryList = [
     "Botswana",
     "Bouvet Island",
     "Brazil",
+    "Brasil",
     "British Indian Ocean Territory",
     "Brunei Darussalam",
     "Bulgaria",
@@ -138,13 +140,16 @@ const countryList = [
     "Cuba",
     "Curaçao",
     "Cyprus",
-    "Czechia",
+    "Czech Republic",
     "Côte d'Ivoire",
     "Denmark",
+    "Deutschland",
     "Djibouti",
     "Dominica",
     "Dominican Republic",
+    "Deutschland",
     "Ecuador",
+    "España",
     "Egypt",
     "El Salvador",
     "Equatorial Guinea",
@@ -224,6 +229,7 @@ const countryList = [
     "Mauritius",
     "Mayotte",
     "Mexico",
+    "México",
     "Micronesia",
     "Moldova",
     "Monaco",
@@ -299,7 +305,7 @@ const countryList = [
     "Syrian Arab Republic",
     "Taiwan",
     "Tajikistan",
-    "Tanzania, United Republic of",
+    "Tanzania",
     "Thailand",
     "Timor-Leste",
     "Togo",
@@ -313,7 +319,7 @@ const countryList = [
     "Tuvalu",
     "Uganda",
     "Ukraine",
-    "United Arab Emirates ",
+    "United Arab Emirates",
     "United Kingdom",
     "UK",
     "United States",
@@ -329,7 +335,8 @@ const countryList = [
     "Yemen",
     "Zambia",
     "Zimbabwe",
-    "Åland Islands"
+    "Åland Islands",
+    "unknown country name"
 ];
 
 
