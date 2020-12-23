@@ -3,16 +3,16 @@ const duplicates = async (req, res) => {
         {
             $group: {
                 _id: "$properties.userID",
-                /*country: {$first: "$properties.ownerLocation"},
+                country: {$first: "$properties.ownerLocation"},
                 year: {$first: "$properties.yearTaken"},
                 day: {$first: "$properties.dayTaken"},
-                month: {$first: "$properties.monthTaken"},*/
+                month: {$first: "$properties.monthTaken"},
                 hour: {$addToSet: "$properties.hourTaken"},
-                /*allLoc: {$addToSet: "$geometry.coordinates"}*/
+                allLoc: {$first: "$geometry.coordinates"}
             }
         },
-
-        /*{
+        {$unwind: {path: "$hour", preserveNullAndEmptyArrays: true}},
+        {
             $project: {
                 "_id": 0,
                 "geometry.coordinate": "$allLoc",
@@ -25,7 +25,7 @@ const duplicates = async (req, res) => {
 
             }
         },
-        {$out: "transform"}*/
+        {$out: "transformed"}
 
     ]);
 
