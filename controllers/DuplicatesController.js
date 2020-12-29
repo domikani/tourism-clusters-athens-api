@@ -15,13 +15,14 @@ const duplicates = async (req, res) => {
         {
             $project: {
                 "_id": 0,
-                "geometry.coordinate": "$allLoc",
-                "properties.userID": "$_id",
-                "properties.country": "$country",
-                "properties.year": "$year",
-                "properties.month": "$month",
-                "properties.day": "$day",
-                "properties.hour": "$hour",
+                "lng": {$arrayElemAt: ["$allLoc", 0]},
+                "lat": {$arrayElemAt: ["$allLoc", 1]},
+                "userID": "$_id",
+                "country": "$country",
+                "year": "$year",
+                "month": "$month",
+                "day": "$day",
+                "hour": "$hour",
 
             }
         },
