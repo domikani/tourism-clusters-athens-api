@@ -34,6 +34,31 @@ const geoSchema = mongoose.Schema({
     }
 });
 
+const attractionSchema = mongoose.Schema({
+
+    type: String,
+    properties: {
+        name: String,
+        type: String,
+        img: String,
+        source: String,
+        id: mongoose.Types.ObjectId
+    },
+    geometry: {
+        type: {
+            type: String,
+            enum: ['Point'],
+            required: true
+        },
+        coordinates: {
+            type: [Number],
+            required: true
+        }
+    }
+
+
+});
 
 
 global.Geo = mongoose.model("Geo", geoSchema);
+global.Attraction = mongoose.model('Attraction', attractionSchema);
