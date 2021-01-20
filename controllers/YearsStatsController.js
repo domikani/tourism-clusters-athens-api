@@ -1,13 +1,11 @@
-const helpers = require("../helpers");
 const yearStats = async (req, res) => {
-    const posts = await Geo.find().exec();
-    const labels = ["2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019"];
+    // const labels = ["2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019"];
     const results = [];
 
-    for (let l = 0; l < labels.length; l++) {
-        const num = await Geo.countDocuments({"properties.yearTaken": labels[l]});
-        results.push(num);
-    }
+    /*for (let l = 0; l < labels.length; l++) {*/
+    const num = await Geo.countDocuments({"properties.yearTaken": 2009});
+    results.push(num);
+    /*}*/
     await res.json({
         success: true,
         chartData: [
@@ -18,7 +16,7 @@ const yearStats = async (req, res) => {
 
 
         ],
-        labels: labels,
+        labels: 2009,
 
 
     });

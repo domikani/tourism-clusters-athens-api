@@ -35,14 +35,13 @@ const geoSchema = mongoose.Schema({
 });
 
 const attractionSchema = mongoose.Schema({
-
     type: String,
     properties: {
         name: String,
-        type: String,
+        category: String,
         img: String,
         source: String,
-        id: mongoose.Types.ObjectId
+        sourceName: String
     },
     geometry: {
         type: {
@@ -61,4 +60,4 @@ const attractionSchema = mongoose.Schema({
 
 
 global.Geo = mongoose.model("Geo", geoSchema);
-global.Attraction = mongoose.model('Attraction', attractionSchema);
+global.Attraction = mongoose.model("Attraction", attractionSchema);
