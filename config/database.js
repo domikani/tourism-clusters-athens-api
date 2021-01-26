@@ -55,9 +55,28 @@ const attractionSchema = mongoose.Schema({
         }
     }
 
+});
+
+const clusterSchema = mongoose.Schema({
+    type: String,
+    properties: {
+        cluster_id: Number,
+        frequency: Number
+    },
+    geometry: {
+        type: {
+            type: String,
+            enum: ['Point'],
+            required: true
+        },
+        coordinates: {
+            type: [Number],
+            required: true
+        }
+    }
 
 });
 
-
 global.Geo = mongoose.model("Geo", geoSchema);
 global.Attraction = mongoose.model("Attraction", attractionSchema);
+global.Cluster = mongoose.model("Cluster", clusterSchema);

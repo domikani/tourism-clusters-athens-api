@@ -4,7 +4,8 @@ const attractions = async (req, res) => {
 
     await res.json({
         success: true,
-        data: topAttractions
+        type: "FeFeatureCollection",
+        features: topAttractions
     });
 };
 
