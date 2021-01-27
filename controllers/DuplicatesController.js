@@ -7,11 +7,11 @@ const duplicates = async (req, res) => {
                 year: {$first: "$properties.yearTaken"},
                 day: {$first: "$properties.dayTaken"},
                 month: {$first: "$properties.monthTaken"},
-                hour: {$addToSet: "$properties.hourTaken"},
-                allLoc: {$first: "$geometry.coordinates"}
+                /* hour: {$addToSet: "$properties.hourTaken"},*/
+                allLoc: {$addToSet: "$geometry.coordinates"}
             }
         },
-        {$unwind: {path: "$hour", preserveNullAndEmptyArrays: true}},
+        {$unwind: {path: "$allLoc", preserveNullAndEmptyArrays: true}},
         {
             $project: {
                 "_id": 0,
