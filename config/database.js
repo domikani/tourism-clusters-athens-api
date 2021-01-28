@@ -61,7 +61,8 @@ const clusterSchema = mongoose.Schema({
     type: String,
     properties: {
         cluster_id: Number,
-        frequency: Number
+        frequency: Number,
+        area: Number
     },
     geometry: {
         type: {

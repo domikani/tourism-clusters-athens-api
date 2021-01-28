@@ -7,7 +7,6 @@ const duplicates = async (req, res) => {
                 year: {$first: "$properties.yearTaken"},
                 day: {$first: "$properties.dayTaken"},
                 month: {$first: "$properties.monthTaken"},
-                /* hour: {$addToSet: "$properties.hourTaken"},*/
                 allLoc: {$addToSet: "$geometry.coordinates"}
             }
         },
@@ -22,11 +21,10 @@ const duplicates = async (req, res) => {
                 "year": "$year",
                 "month": "$month",
                 "day": "$day",
-                "hour": "$hour",
 
             }
         },
-        {$out: "transformed"}
+        {$out: "cleanedData"}
 
     ]);
 
