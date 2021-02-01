@@ -78,6 +78,29 @@ const clusterSchema = mongoose.Schema({
 
 });
 
+const statisticSchema = mongoose.Schema({
+    type: String,
+    properties: {
+        user_id: Number,
+        cluster_id: Number,
+        country: String,
+        year: Number,
+        month: Number,
+    },
+    geometry: {
+        type: {
+            type: String,
+            enum: ['Point'],
+            required: true
+        },
+        coordinates: {
+            type: [Number],
+            required: true
+        }
+    }
+});
+
 global.Geo = mongoose.model("Geo", geoSchema);
 global.Attraction = mongoose.model("Attraction", attractionSchema);
 global.Cluster = mongoose.model("Cluster", clusterSchema);
+global.Statistic = mongoose.model("Statistic", statisticSchema);

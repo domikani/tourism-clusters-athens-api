@@ -1,24 +1,40 @@
 const yearStats = async (req, res) => {
-    // const labels = ["2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019"];
-    const results = [];
+    const results = await Statistic.aggregate([
+        {
+            $group: {
+                _id: {
+                    cluster: "$properties.cluster_id",
+                    year: "$properties.year",
+                },
+                count: {$sum: 1}
+            }
+        },
+        {
+            $sort: {'_id.year': 1}
+        },
+        {
+            $group: {
+                _id: "$_id.cluster",
+                data: {
+                    $push: {
+                        year: "$_id.year",
+                        total: "$count"
+                    }
+                },
 
-    /*for (let l = 0; l < labels.length; l++) {*/
-    const num = await Geo.countDocuments({"properties.yearTaken": 2009});
-    results.push(num);
-    /*}*/
-    await res.json({
-        success: true,
-        chartData: [
-            {
-                label: 'Photos taken between 2009 and 2019',
-                data: results
             },
+        },
+        {
+            $sort: {_id: 1}
+        },
 
 
-        ],
-        labels: 2009,
+    ]);
 
 
+    return res.json({
+        type: "FeatureCollection",
+        features: results
     });
 };
 
