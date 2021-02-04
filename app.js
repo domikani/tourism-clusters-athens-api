@@ -16,6 +16,7 @@ const DeleteController = require("./controllers/DeleteController");
 const DuplicatesController = require("./controllers/DuplicatesController");
 const AttractionsController = require("./controllers/AttractionsController");
 const ClustersController = require("./controllers/ClustersController");
+const StatisticController = require("./controllers/StatisticController");
 
 
 //Initialize app
@@ -41,6 +42,7 @@ app.get("/posts/delete", DeleteController.cleanData);
 app.get("/posts/duplicate", DuplicatesController.duplicates);
 app.get("/posts/attractions", AttractionsController.attractions);
 app.get("/posts/clusters", ClustersController.clusters);
+app.get("/posts/statistics", StatisticController.statistics);
 
 
 
