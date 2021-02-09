@@ -7,6 +7,7 @@ const yearStats = async (req, res) => {
                         $group: {
                             _id: {
                                 cluster: "$properties.cluster_id",
+                                aoi: "$properties.aoi",
                             },
                             count: {$sum: 1}
                         },
@@ -16,6 +17,9 @@ const yearStats = async (req, res) => {
                             _id: "$_id.cluster",
                             data: {
                                 $push: '$count'
+                            },
+                            aoi: {
+                                $push: '$_id.aoi'
                             }
                         },
 
