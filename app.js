@@ -21,7 +21,7 @@ const StatisticController = require("./controllers/StatisticController");
 
 //Initialize app
 const app = express();
-app.listen(process.env.PORT);
+app.listen(process.env.PORT || 3000);
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
