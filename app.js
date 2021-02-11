@@ -5,6 +5,8 @@ require('dotenv').config(); // vivliothiki //
 
 //Require MongoDB connection and models
 require("./config/database");
+const mongoose = require(mongoose);
+mongoose.connect(process.env.MONGO_URI || 'mongodb://develobird.gr:47017/flickrTourismDB');
 
 // Require Controllers
 const YearsStatsController = require("./controllers/YearsStatsController");
