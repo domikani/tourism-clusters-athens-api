@@ -20,7 +20,7 @@
     "request-promise": "^4.2.5"
   },
   "engines": {
-    "node": "12.13.0"
+    "node": "14.20.1"
   }
 }
 
